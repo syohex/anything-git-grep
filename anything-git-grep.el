@@ -4,6 +4,7 @@
 ;; Copyright (C) 2011 Jose Pablo Barrantes
 ;; Created: 18/Dec/11
 ;; Version: 0.1.0
+;; Package-Requires: ((anything "1.3.0"))
 
 ;;; Installation:
 ;; Put this file where you defined your `load-path` directory or just
@@ -107,12 +108,12 @@
 (defun anything-git-grep-action (candidate)
   (string-match ":\\([0-9]+\\):" candidate)
   (save-match-data
-    (setq file-full-path
-          (concat
-           (anything-git-grep-find-repo default-directory)
-           (substring candidate 0 (match-beginning 0))))
-    (if (file-exists-p file-full-path)
-        (find-file file-full-path)))
+    (let ((file-full-path
+           (concat
+            (anything-git-grep-find-repo default-directory)
+            (substring candidate 0 (match-beginning 0)))))
+     (if (file-exists-p file-full-path)
+         (find-file file-full-path))))
   (goto-line (string-to-number (match-string 1 candidate)))
   (if (get-buffer *anything-git-grep-buffer-name*)
       (kill-buffer *anything-git-grep-buffer-name*)))
@@ -139,3 +140,4 @@
    '(anything-c-source-git-grep) *anything-git-grep-buffer-name*))
 
 (provide 'anything-git-grep)
+;;; anything-git-grep.el ends here
